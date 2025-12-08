@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
-const { logMessage } = require("./logs");
+const { logMessage } = require("./log");
 
 const mirrors = [
   { 
