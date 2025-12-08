@@ -52,8 +52,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
 });
 
 client.on("messageCreate", async (message) => {
-  if (message.author.bot) return;
-  
+  if (message.author.id === client.user.id) return;
+
   console.log(`Message received: ${message.content}`);
   console.log(`From: ${message.author.tag} (${message.author.id})`);
   console.log(`Channel: ${message.channel.name} (${message.channel.id})`);
