@@ -5,7 +5,7 @@ const {
   GatewayIntentBits,
   Events,
 } = require("discord.js");
-const { handleMirroring } = require("./functions/sharing/sharing");
+const { handleMirroring } = require("./forwarding");
 require("dotenv").config();
 
 const commands = [
