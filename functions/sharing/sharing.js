@@ -121,7 +121,7 @@ const writeMessage = async (questionB, message, target) => {
   
   console.log("Sending message to target channel...");
   try {
-    const targetChannel = await message.client.channels.cache.get(target);
+    const targetChannel = await message.client.channels.fetch(target);
     if (targetChannel) {
       await targetChannel.send({
         content: message.content,
@@ -164,17 +164,5 @@ const handleMirroring = async (message) => {
   
   console.log("handleMirroring completed");
 };
-
-// const handleMirroring = async (message) => {
-//   for (const [male, female] of Object.entries(mirror)) {
-//     if (message.channel.id == male) {
-//       message.client.channels.cache.get(female).send({content: message.content, files: message.attachments.map(a => a.url)});
-//     } else if (message.channel.id == female) {
-//       message.client.channels.cache.get(male).send({content: message.content, files: message.attachments.map(a => a.url)});
-//     } else {
-//       continue;
-//     }
-//   }
-// }
 
 module.exports = { handleMirroring };
