@@ -101,7 +101,7 @@ const questionBool = async (message) => {
   }
 };
 
-const writeMessage = async (questionB, message, target) => {
+const writeMessage = async (questionB, message, target, femaleText) => {
   console.log(`writeMessage called - questionB: ${questionB}, target: ${target}`);
   
   if (questionB == true) {
@@ -124,12 +124,16 @@ const writeMessage = async (questionB, message, target) => {
     const targetChannel = await message.client.channels.fetch(target);
     if (targetChannel) {
       await targetChannel.send({
-        content: message.content,
+        content: femaleText === null
+        ? message.content // NO SUFFIX
+        : femaleText
+          ? message.content + "\n-# ||*Sent by a sister*||"
+          : message.content + "\n-# ||*Sent by a brother*||",
         files: message.attachments.map(a => a.url)
       });
       console.log("Message sent successfully!");
 
-      await logMessage(message, target);
+      await logMessage(message, target, femaleText);
       
       const reply = await message.reply("✅ Message mirrored successfully!");
       setTimeout(() => {
@@ -143,26 +147,33 @@ const writeMessage = async (questionB, message, target) => {
   }
 };
 
-const handleMirroring = async (message) => {
+const handleMirroring = async (message, addSuffix) => {
   console.log("handleMirroring called");
   
   let question = true;
+  let foundChannel = false;
   
   for (const mirror of mirrors) {
     console.log("Checking mirror set...");
     for (const [MaleCID, FemaleCID] of Object.entries(mirror)) {
       if (message.channel.id == MaleCID) {
         console.log(`Match found! Mirroring from Male -> Female`);
-        await writeMessage(question, message, FemaleCID);
+        foundChannel = true;
+        await writeMessage(question, message, FemaleCID, addSuffix ? false : null);
       } else if (message.channel.id == FemaleCID) {
         console.log(`Match found! Mirroring from Female -> Male`);
-        await writeMessage(question, message, MaleCID);
+        foundChannel = true;
+        await writeMessage(question, message, MaleCID, addSuffix ? true : null);
       }
     }
     question = false;
   }
-  
-  console.log("handleMirroring completed");
+
+  if (foundChannel){
+    console.log("handleMirroring completed");
+  } else {
+    console.log("The channel is not to be mirrored");
+  }
 };
 
 module.exports = { handleMirroring };

@@ -52,13 +52,16 @@ client.on(Events.InteractionCreate, async (interaction) => {
 });
 
 client.on("messageCreate", async (message) => {
-  if (message.author.id === client.user.id) return;
+  const notYTBot = message.author.id != "456633518882160642";
+
+  if (message.author.bot && notYTBot) return;
+  // analyze only messages from users or YT Bot
 
   console.log(`Message received: ${message.content}`);
   console.log(`From: ${message.author.tag} (${message.author.id})`);
   console.log(`Channel: ${message.channel.name} (${message.channel.id})`);
   
-  await handleMirroring(message);
+  await handleMirroring(message, notYTBot);
 });
 
 client.login(process.env.DISCORD_BOT_TOKEN);
