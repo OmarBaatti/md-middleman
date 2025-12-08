@@ -1,4 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
+const { logMessage } = require("./logs");
 
 const mirrors = [
   { 
@@ -127,6 +128,8 @@ const writeMessage = async (questionB, message, target) => {
         files: message.attachments.map(a => a.url)
       });
       console.log("Message sent successfully!");
+
+      await logMessage(message, target);
       
       const reply = await message.reply("✅ Message mirrored successfully!");
       setTimeout(() => {
